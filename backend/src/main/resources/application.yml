@@ -1,0 +1,36 @@
+# Spring Boot application configuration
+# Optional: configure MySQL datasource. If you run MySQL in Docker as suggested, these
+# values will connect the app to that database.
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/university_cms?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update # use 'update' for development; use 'validate' or migrations in prod
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+  main:
+    allow-bean-definition-overriding: true
+
+# Logging and other helpful settings
+logging:
+  level:
+    org.springframework: INFO
+    com.erp: DEBUG
+
+# If you prefer to keep using H2 for quick development, remove or override the
+# spring.datasource.* properties above. The app already includes H2 in the pom.xml.
+
+# Notes:
+# 1) To run MySQL in Docker (example):
+#    docker run -d -p 3306:3306 --name mysql -e MYSQL_ROOT_PASSWORD=root mysql
+# 2) Ensure the database 'university_cms' exists or allow the app to create tables
+#    with spring.jpa.hibernate.ddl-auto=update. To create DB manually:
+#    docker exec -it mysql mysql -uroot -proot -e "CREATE DATABASE IF NOT EXISTS university_cms;"
+# 3) If running backend in Docker or remote host, change the datasource host accordingly.
