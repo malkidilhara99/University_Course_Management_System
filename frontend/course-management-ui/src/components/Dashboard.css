@@ -3,12 +3,12 @@
 .dash-header h2{margin:0}
 .muted{color:var(--muted)}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-top:18px}
-.stat-card{background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));padding:20px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);text-align:center}
-.stat-value{font-size:1.8rem;font-weight:800;color:var(--accent-2)}
+.stat-card{background:var(--card);padding:20px;border-radius:12px;border:1px solid rgba(15,23,42,0.04);text-align:center}
+.stat-value{font-size:1.8rem;font-weight:800;color:var(--accent)}
 .stat-label{color:var(--muted);margin-top:8px}
-.recent{margin-top:22px;padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))}
+.recent{margin-top:22px;padding:16px;border-radius:12px;border:1px solid rgba(15,23,42,0.04);background:var(--card)}
 .recent ul{margin:8px 0 0;padding-left:18px;color:var(--muted)}
-.recent li{padding:8px 0;border-bottom:1px dashed rgba(255,255,255,0.02)}
+.recent li{padding:8px 0;border-bottom:1px dashed rgba(15,23,42,0.03)}
 
 @media(max-width:640px){
 	.dash-header{flex-direction:column;align-items:flex-start}

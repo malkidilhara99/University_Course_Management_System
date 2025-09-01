@@ -2,13 +2,14 @@
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:12px 20px;
-  background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  padding:14px 22px;
+  background:var(--surface);
   color:var(--white);
+  border-bottom:1px solid rgba(15,23,42,0.04);
 }
-.nav a{ color:rgba(255,255,255,0.85); text-decoration:none; margin-left:16px; padding:8px 10px; border-radius:8px }
-.nav a:hover{ background:var(--glass) }
-.nav-brand{ font-weight:700; max-width:60%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:1.05rem }
+.nav a{ color:var(--accent); text-decoration:none; margin-left:14px; padding:8px 10px; border-radius:10px; transition:background .12s ease,transform .12s ease }
+.nav a:hover{ background:var(--glass); transform:translateY(-2px) }
+.nav-brand{ font-weight:700; max-width:60%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:1.05rem; color:var(--white) }
 .nav-links{ display:flex; align-items:center }
 
 @media(max-width:640px){
