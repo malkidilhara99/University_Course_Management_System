@@ -1,0 +1,38 @@
+.modal-backdrop {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(44,62,80,0.18);
+  backdrop-filter: blur(2px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-content {
+  background: linear-gradient(135deg,#fff 80%,#e5e7eb 100%);
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(99,102,241,0.12);
+  padding: 32px 28px 24px 28px;
+  min-width: 340px;
+  max-width: 96vw;
+  position: relative;
+  animation: modalIn .22s cubic-bezier(.4,2,.6,1) forwards;
+}
+@keyframes modalIn {
+  from { transform: scale(.92); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.modal-close {
+  position: absolute;
+  top: 16px; right: 18px;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #2563eb;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity .16s;
+}
+.modal-close:hover {
+  opacity: 1;
+}

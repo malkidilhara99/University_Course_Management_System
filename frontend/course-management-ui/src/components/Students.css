@@ -60,3 +60,20 @@
   background: #dbeafe;
   color: #1e40af;
 }
+.open-modal-btn {
+  background: linear-gradient(90deg,#4f93f7,#43e7d8);
+  color: white;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 22px;
+  margin-bottom: 18px;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.08);
+  cursor: pointer;
+  font-size: 1.08rem;
+  transition: background .16s, box-shadow .16s;
+}
+.open-modal-btn:hover {
+  background: linear-gradient(90deg,#43e7d8,#4f93f7);
+  box-shadow: 0 6px 18px rgba(99,102,241,0.14);
+}

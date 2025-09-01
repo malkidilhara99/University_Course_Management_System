@@ -1,9 +1,11 @@
-
-import React from 'react';
-import './Dashboard.css';
+import React, { useState } from 'react';
 import { BookOpen, Users, ClipboardList } from 'lucide-react';
+import Modal from './Modal';
+import CourseFillForm from './CourseFillForm';
+import './Dashboard.css';
 
 export default function Dashboard() {
+  const [courseModalOpen, setCourseModalOpen] = useState(false);
   // Demo stat values; replace with real data as needed
   const stats = [
     { label: 'Total Courses', value: 12, icon: <BookOpen size={32} /> },
@@ -26,6 +28,11 @@ export default function Dashboard() {
     { id: 'S002', name: 'Bob', major: 'Math', year: '1' },
   ];
 
+  function handleCourseCreated() {
+    setCourseModalOpen(false);
+    // Optionally refresh course data here
+  }
+
   return (
     <div className="dash-root container">
       <div className="dash-header">
@@ -42,6 +49,13 @@ export default function Dashboard() {
           </div>
         ))}
       </div>
+
+      <button className="open-modal-btn" onClick={()=>setCourseModalOpen(true)}>
+        + Add Course
+      </button>
+      <Modal open={courseModalOpen} onClose={()=>setCourseModalOpen(false)}>
+        <CourseFillForm onCreated={handleCourseCreated} />
+      </Modal>
 
       <div className="dash-sections">
         <div className="section-card">

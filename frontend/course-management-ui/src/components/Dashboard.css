@@ -1,4 +1,4 @@
-	.dash-header{flex-direction:column;align-items:flex-start}
+.dash-header{flex-direction:column;align-items:flex-start}
 
 .dash-root{padding:32px 12px;max-width:1100px;margin:0 auto}
 .dash-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
@@ -37,6 +37,24 @@
 .section-table th,.section-table td{padding:8px 10px;text-align:left;border-bottom:1px solid rgba(99,102,241,0.07)}
 .section-table th{background:rgba(99,102,241,0.08);font-weight:700;color:var(--accent)}
 .section-table tr:last-child td{border-bottom:none}
+
+.open-modal-btn {
+  background: linear-gradient(90deg,#4f93f7,#43e7d8);
+  color: white;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 22px;
+  margin-bottom: 18px;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.08);
+  cursor: pointer;
+  font-size: 1.08rem;
+  transition: background .16s, box-shadow .16s;
+}
+.open-modal-btn:hover {
+  background: linear-gradient(90deg,#43e7d8,#4f93f7);
+  box-shadow: 0 6px 18px rgba(99,102,241,0.14);
+}
 
 @media(max-width:920px){
 	.dash-sections{grid-template-columns:1fr 1fr;}
