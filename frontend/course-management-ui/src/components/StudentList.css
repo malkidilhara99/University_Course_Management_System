@@ -1,0 +1,10 @@
+.student-list-root{padding:12px}
+.list-header{display:flex;align-items:center;justify-content:space-between}
+.notice{background:rgba(255,165,0,0.06);color:var(--muted);padding:8px;border-radius:8px;margin-top:8px}
+.students{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+.student-item{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);cursor:pointer;transition:transform .12s ease}
+.student-item:hover{transform:translateY(-4px);box-shadow:0 12px 24px rgba(2,6,23,0.4)}
+.student-name{font-weight:700}
+.student-meta{font-size:0.85rem;color:var(--muted)}
+.chev{font-size:1.3rem;color:var(--muted)}
+.loader{color:var(--muted)}

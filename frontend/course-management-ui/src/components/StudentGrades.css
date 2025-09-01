@@ -1,0 +1,4 @@
+.grades-root{padding:12px}
+.grades-table{width:100%;border-collapse:collapse;margin-top:8px}
+.grades-table th{text-align:left;padding:8px;color:var(--muted)}
+.grades-table td{padding:8px;border-top:1px solid rgba(255,255,255,0.03)}

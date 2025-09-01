@@ -1,0 +1,9 @@
+.home-root{ padding:28px 12px; text-align:center; max-width:var(--max-width); margin:0 auto }
+.hero{ background:linear-gradient(90deg, rgba(6,182,212,0.08), rgba(14,165,164,0.04)); padding:36px; border-radius:12px; display:flex;flex-direction:column;align-items:center;gap:12px }
+.hero h1{ color:var(--white); margin:0; font-size:1.9rem}
+.hero p{ color:var(--muted); margin:0; max-width:760px }
+.hero-actions{display:flex;gap:12px;margin-top:6px}
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:20px}
+.feature{background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));padding:18px;border-radius:10px;border:1px solid rgba(255,255,255,0.03)}
+.feature h3{margin:0 0 8px}
+.feature p{color:var(--muted);margin:0}
