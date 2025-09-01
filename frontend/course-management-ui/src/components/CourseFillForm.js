@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './CourseFillForm.css';
+import API_BASE from '../api';
 
 export default function CourseFillForm({ onCreated }) {
   const [title, setTitle] = useState('');
@@ -18,7 +19,7 @@ export default function CourseFillForm({ onCreated }) {
 
     try {
       // try to POST to backend; if it fails, just simulate success
-      const res = await fetch('/api/courses', {
+  const res = await fetch(`${API_BASE}/api/courses`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)

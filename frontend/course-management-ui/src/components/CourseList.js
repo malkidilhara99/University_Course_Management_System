@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './CourseList.css';
+import API_BASE from '../api';
 
 export default function CourseList({ onSelect }) {
   const [courses, setCourses] = useState([]);
@@ -14,7 +15,7 @@ export default function CourseList({ onSelect }) {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch('/api/courses');
+  const res = await fetch(`${API_BASE}/api/courses`);
       if (!res.ok) throw new Error('Network response was not ok');
       const data = await res.json();
       setCourses(data);
@@ -46,18 +47,27 @@ export default function CourseList({ onSelect }) {
       {loading ? (
         <div className="loader">Loading...</div>
       ) : (
-        <div className="courses-grid">
-          {courses.map(c => (
-            <article key={c.id} className="course-card" onClick={() => onSelect && onSelect(c)}>
-              <div className="course-meta">
-                <span className="course-code">{c.code}</span>
-                <span className="course-credits">{c.credits} cr</span>
-              </div>
-              <h4 className="course-title">{c.title}</h4>
-              <div className="course-dept">{c.department}</div>
-              <p className="course-desc">{c.description}</p>
-            </article>
-          ))}
+        <div className="table-wrap">
+          <table className="courses-table">
+            <thead>
+              <tr>
+                <th>Code</th>
+                <th>Title</th>
+                <th>Credits</th>
+                <th>Department</th>
+              </tr>
+            </thead>
+            <tbody>
+              {courses.map(c => (
+                <tr key={c.id} className="course-row" onClick={() => onSelect && onSelect(c)}>
+                  <td className="course-code">{c.code}</td>
+                  <td className="course-title">{c.title}</td>
+                  <td className="course-credits">{c.credits}</td>
+                  <td className="course-dept">{c.department}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </section>

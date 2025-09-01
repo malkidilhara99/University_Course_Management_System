@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import './StudentList.css';
+import API_BASE from '../api';
 
-export default function StudentList({ onSelect }) {
+export default function StudentList({ onSelect, refreshKey }) {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => { fetchStudents(); }, []);
+  useEffect(() => { fetchStudents(); }, [refreshKey]);
 
   async function fetchStudents() {
     setLoading(true); setError(null);
     try {
-      const res = await fetch('/api/students');
+  const res = await fetch(`${API_BASE}/api/students`);
       if (!res.ok) throw new Error('Network error');
       const data = await res.json();
       setStudents(data);

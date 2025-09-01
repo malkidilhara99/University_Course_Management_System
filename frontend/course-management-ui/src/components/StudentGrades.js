@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './StudentGrades.css';
+import API_BASE from '../api';
 
 export default function StudentGrades({ studentId }){
   const [grades, setGrades] = useState([]);
@@ -8,7 +9,7 @@ export default function StudentGrades({ studentId }){
     // fetch grades for the student
     (async ()=>{
       try{
-        const res = await fetch(`/api/students/${studentId}/grades`);
+  const res = await fetch(`${API_BASE}/api/students/${studentId}/grades`);
         if(!res.ok) throw new Error('no grades');
         const data = await res.json();
         setGrades(data);

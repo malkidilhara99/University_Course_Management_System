@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './StudentForm.css';
+import API_BASE from '../api';
 
 export default function StudentForm({ onCreated }) {
   const [name, setName] = useState('');
@@ -13,7 +14,7 @@ export default function StudentForm({ onCreated }) {
     setSaving(true); setNote(null);
     const payload = { name, email, major };
     try {
-      const res = await fetch('/api/students', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)});
+  const res = await fetch(`${API_BASE}/api/students`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)});
       if (!res.ok) throw new Error('Server error');
       const created = await res.json();
       setNote('Student created'); setName(''); setEmail(''); setMajor('');
