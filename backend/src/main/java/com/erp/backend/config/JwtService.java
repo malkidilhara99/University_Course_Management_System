@@ -13,7 +13,7 @@ import java.util.Map;
 @Service
 public class JwtService {
 
-    @Value("${jwt.secret:changeit}")
+    @Value("${jwt.secret:mySecureSecretKeyThatIsAtLeast32CharactersLongForHS256Algorithm}")
     private String jwtSecret;
 
     @Value("${jwt.expiration-ms:86400000}")

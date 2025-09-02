@@ -43,7 +43,7 @@ public class SecurityConfig {
         .cors().and()
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/api/auth/**", "/actuator/**").permitAll()
-            .requestMatchers("/api/courses/**").permitAll() // Allow unauthenticated access to courses
+            .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/courses/**").permitAll() // Allow GET for courses
             .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll() // Allow preflight
             .anyRequest().authenticated()
         )
