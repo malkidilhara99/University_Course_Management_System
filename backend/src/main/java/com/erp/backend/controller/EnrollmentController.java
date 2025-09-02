@@ -48,7 +48,6 @@ public class EnrollmentController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Enrollment> createEnrollment(@Valid @RequestBody EnrollmentCreateRequest request) {
         try {
             Enrollment createdEnrollment = enrollmentService.createEnrollment(request.getStudentId(), request.getCourseId(), request.getStatus());
@@ -92,7 +91,6 @@ public class EnrollmentController {
     }
 
     @PutMapping("/{id}/grade")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Enrollment> updateGrade(@PathVariable Long id, @RequestBody GradeUpdateRequest request) {
         try {
             Enrollment updatedEnrollment = enrollmentService.updateGrade(id, request.getGrade(), request.getScore());
@@ -103,7 +101,6 @@ public class EnrollmentController {
     }
 
     @PutMapping("/{id}/status")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Enrollment> updateStatus(@PathVariable Long id, @RequestBody StatusUpdateRequest request) {
         try {
             Enrollment updatedEnrollment = enrollmentService.updateStatus(id, request.getStatus());

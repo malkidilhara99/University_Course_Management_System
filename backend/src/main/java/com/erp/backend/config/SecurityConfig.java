@@ -44,6 +44,8 @@ public class SecurityConfig {
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/api/auth/**", "/actuator/**").permitAll()
             .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/courses/**").permitAll() // Allow GET for courses
+            .requestMatchers("/api/students/**").permitAll() // Allow all operations for students
+            .requestMatchers("/api/enrollments/**").permitAll() // Allow all operations for enrollments
             .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll() // Allow preflight
             .anyRequest().authenticated()
         )
