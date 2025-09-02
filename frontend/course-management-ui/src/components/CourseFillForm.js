@@ -27,9 +27,14 @@ export default function CourseFillForm({ onCreated }) {
     if (Object.keys(newErrors).length > 0) { setSaving(false); return; }
     const payload = { title, code, credits: Number(credits), department, description };
     try {
+      // Get JWT token from localStorage
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
       const res = await fetch(`${API_BASE}/api/courses`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(user.token ? { 'Authorization': 'Bearer ' + user.token } : {})
+        },
         body: JSON.stringify(payload)
       });
       if (!res.ok) throw new Error('Server rejected course creation');

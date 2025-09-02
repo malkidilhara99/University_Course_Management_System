@@ -32,8 +32,9 @@ export default function Register() {
       });
       const data = await res.json();
       if (res.ok) {
-        setMessage('Registration successful!');
+        setMessage('User has been registered! You can now log in.');
         setName(''); setEmail(''); setPassword(''); setRole('Student');
+        setTimeout(() => window.location.reload(), 1200);
       } else {
         setMessage(data.message || 'Registration failed.');
       }
