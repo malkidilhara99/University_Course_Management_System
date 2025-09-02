@@ -1,32 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BookOpen, Users, ClipboardList } from 'lucide-react';
 import Modal from './Modal';
 import CourseFillForm from './CourseFillForm';
+import API_BASE from '../api';
 import './Dashboard.css';
 
 export default function Dashboard() {
   const [courseModalOpen, setCourseModalOpen] = useState(false);
-  // Demo stat values; replace with real data as needed
-  const stats = [
-    { label: 'Total Courses', value: 12, icon: <BookOpen size={32} /> },
-    { label: 'Total Students', value: 240, icon: <Users size={32} /> },
-    { label: 'Total Enrollments', value: 482, icon: <ClipboardList size={32} /> },
-  ];
+  const [stats, setStats] = useState([]);
+  const [coursesByDept, setCoursesByDept] = useState([]);
+  const [recentCourses, setRecentCourses] = useState([]);
+  const [recentStudents, setRecentStudents] = useState([]);
 
-  // Demo table data; replace with real API data as needed
-  const coursesByDept = [
-    { dept: 'Computer Science', count: 5 },
-    { dept: 'Mathematics', count: 3 },
-    { dept: 'Physics', count: 4 },
-  ];
-  const recentCourses = [
-    { code: 'CS101', title: 'Intro to CS', credits: 3 },
-    { code: 'MATH201', title: 'Calculus II', credits: 4 },
-  ];
-  const recentStudents = [
-    { id: 'S001', name: 'Alice', major: 'CS', year: '2' },
-    { id: 'S002', name: 'Bob', major: 'Math', year: '1' },
-  ];
+  useEffect(() => {
+    // Fetch stats
+    fetch(`${API_BASE}/api/dashboard/stats`).then(res => res.json()).then(data => {
+      setStats([
+        { label: 'Total Courses', value: data.totalCourses, icon: <BookOpen size={32} /> },
+        { label: 'Total Students', value: data.totalStudents, icon: <Users size={32} /> },
+        { label: 'Total Enrollments', value: data.totalEnrollments, icon: <ClipboardList size={32} /> },
+      ]);
+    }).catch(() => {});
+    // Fetch courses by department
+    fetch(`${API_BASE}/api/courses/by-department`).then(res => res.json()).then(setCoursesByDept).catch(() => setCoursesByDept([]));
+    // Fetch recent courses
+    fetch(`${API_BASE}/api/courses/recent`).then(res => res.json()).then(setRecentCourses).catch(() => setRecentCourses([]));
+    // Fetch recent students
+    fetch(`${API_BASE}/api/students/recent`).then(res => res.json()).then(setRecentStudents).catch(() => setRecentStudents([]));
+  }, []);
 
   function handleCourseCreated() {
     setCourseModalOpen(false);

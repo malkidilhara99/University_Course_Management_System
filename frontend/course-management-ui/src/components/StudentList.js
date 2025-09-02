@@ -12,18 +12,13 @@ export default function StudentList({ onSelect, refreshKey }) {
   async function fetchStudents() {
     setLoading(true); setError(null);
     try {
-  const res = await fetch(`${API_BASE}/api/students`);
+      const res = await fetch(`${API_BASE}/api/students`);
       if (!res.ok) throw new Error('Network error');
       const data = await res.json();
       setStudents(data);
     } catch (e) {
-      console.warn('Student fetch failed, using sample data', e.message);
-      setError('Could not load students from server — showing sample data');
-      setStudents([
-        { id:1, name:'Jane Doe', email:'jane.doe@example.edu', major:'Computer Science' },
-        { id:2, name:'John Smith', email:'john.smith@example.edu', major:'Mathematics' },
-        { id:3, name:'Aisha Khan', email:'aisha.khan@example.edu', major:'Biology' }
-      ]);
+      setError('Could not load students from server.');
+      setStudents([]);
     } finally { setLoading(false); }
   }
 
@@ -41,16 +36,16 @@ export default function StudentList({ onSelect, refreshKey }) {
       {loading ? (
         <div className="loader">Loading...</div>
       ) : (
-        <ul className="students">
-          {students.map(s => (
-            <li key={s.id} className="student-item" onClick={() => onSelect && onSelect(s)}>
-              <div>
-                <div className="student-name">{s.name}</div>
-                <div className="student-meta">{s.email} · {s.major}</div>
-              </div>
-              <div className="chev">›</div>
-            </li>
-          ))}
+        <ul className="student-list">
+          {students.length === 0 ? (
+            <li className="empty">No students found.</li>
+          ) : (
+            students.map(student => (
+              <li key={student.id} onClick={() => onSelect(student)}>
+                <span>{student.name}</span> <span>{student.email}</span> <span>{student.major}</span>
+              </li>
+            ))
+          )}
         </ul>
       )}
     </section>

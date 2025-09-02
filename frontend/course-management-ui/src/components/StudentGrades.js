@@ -9,16 +9,12 @@ export default function StudentGrades({ studentId }){
     // fetch grades for the student
     (async ()=>{
       try{
-  const res = await fetch(`${API_BASE}/api/students/${studentId}/grades`);
+        const res = await fetch(`${API_BASE}/api/students/${studentId}/grades`);
         if(!res.ok) throw new Error('no grades');
         const data = await res.json();
         setGrades(data);
       }catch(e){
-        // sample data fallback
-        setGrades([
-          {course:'CS101', grade:'A'},
-          {course:'MATH201', grade:'B+'}
-        ]);
+        setGrades([]);
       }
     })();
   },[studentId]);

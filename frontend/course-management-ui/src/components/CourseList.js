@@ -15,19 +15,13 @@ export default function CourseList({ onSelect }) {
     setLoading(true);
     setError(null);
     try {
-  const res = await fetch(`${API_BASE}/api/courses`);
+      const res = await fetch(`${API_BASE}/api/courses`);
       if (!res.ok) throw new Error('Network response was not ok');
       const data = await res.json();
       setCourses(data);
     } catch (e) {
-      // fallback to mock data if backend is not available
-      console.warn('Could not fetch courses, using mock data:', e.message);
-      setError('Could not load courses from server — showing sample data');
-      setCourses([
-        { id: 1, code: 'CS101', title: 'Intro to Computer Science', credits: 3, department: 'Computer Science', description: 'Fundamentals of programming, algorithms and problem solving.' },
-        { id: 2, code: 'MATH201', title: 'Calculus II', credits: 4, department: 'Mathematics', description: 'Integration techniques, sequences and series.' },
-        { id: 3, code: 'ENG150', title: 'Academic Writing', credits: 2, department: 'English', description: 'Writing skills for academic success and research.' }
-      ]);
+      setError('Could not load courses from server.');
+      setCourses([]);
     } finally {
       setLoading(false);
     }
@@ -47,29 +41,29 @@ export default function CourseList({ onSelect }) {
       {loading ? (
         <div className="loader">Loading...</div>
       ) : (
-        <div className="table-wrap">
-          <table className="courses-table">
+        <>
+          <table className="course-table">
             <thead>
-              <tr>
-                <th>Code</th>
-                <th>Title</th>
-                <th>Credits</th>
-                <th>Department</th>
-              </tr>
+              <tr><th>Code</th><th>Title</th><th>Credits</th><th>Department</th></tr>
             </thead>
             <tbody>
-              {courses.map(c => (
-                <tr key={c.id} className="course-row" onClick={() => onSelect && onSelect(c)}>
-                  <td className="course-code">{c.code}</td>
-                  <td className="course-title">{c.title}</td>
-                  <td className="course-credits">{c.credits}</td>
-                  <td className="course-dept">{c.department}</td>
-                </tr>
-              ))}
+              {courses.length === 0
+                ? <tr><td colSpan="4" className="empty">No courses found.</td></tr>
+                : courses.map(c => (
+                    <React.Fragment key={c.id}>
+                      <tr className="course-row" onClick={() => onSelect && onSelect(c)}>
+                        <td className="course-code">{c.code}</td>
+                        <td className="course-title">{c.title}</td>
+                        <td className="course-credits">{c.credits}</td>
+                        <td className="course-dept">{c.department}</td>
+                      </tr>
+                    </React.Fragment>
+                  ))
+              }
             </tbody>
           </table>
-        </div>
+        </>
       )}
-    </section>
-  );
+        </section>
+      );
 }

@@ -17,26 +17,35 @@ export default function Enrollments(){
       const data = await res.json();
       setEnrollments(data);
     }catch(e){
-      console.warn('Enrollments fetch failed, using sample data', e.message);
-      setError('Could not load enrollments — showing sample data');
-      setEnrollments([
-        { id:1, student:'Jane Doe', course:'CS101', status:'Enrolled'},
-        { id:2, student:'John Smith', course:'MATH201', status:'Waitlisted'},
-      ]);
-    }finally{ setLoading(false); }
+      setError('Could not load enrollments from server.');
+      setEnrollments([]);
+    }finally{
+      setLoading(false);
+    }
   }
 
   return (
-    <div className="enroll-root">
-      <h2>Enrollments</h2>
+    <div className="enrollments-root card">
+      <div className="list-header">
+        <h3>Enrollments</h3>
+        <button className="btn secondary" onClick={fetchEnrollments}>Refresh</button>
+      </div>
       {error && <div className="notice">{error}</div>}
-      {loading ? <div className="loader">Loading...</div> : (
-        <table className="enroll-table">
-          <thead><tr><th>Student</th><th>Course</th><th>Status</th></tr></thead>
+      {loading ? (
+        <div className="loader">Loading...</div>
+      ) : (
+        <table className="enrollments-table">
+          <thead>
+            <tr><th>Student</th><th>Course</th><th>Status</th></tr>
+          </thead>
           <tbody>
-            {enrollments.map(e => (
-              <tr key={e.id}><td>{e.student}</td><td>{e.course}</td><td>{e.status}</td></tr>
-            ))}
+            {enrollments.length === 0 ? (
+              <tr><td colSpan="3" className="empty">No enrollments found.</td></tr>
+            ) : (
+              enrollments.map(e => (
+                <tr key={e.id}><td>{e.student}</td><td>{e.course}</td><td>{e.status}</td></tr>
+              ))
+            )}
           </tbody>
         </table>
       )}
