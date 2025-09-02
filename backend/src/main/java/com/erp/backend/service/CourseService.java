@@ -5,6 +5,7 @@ import com.erp.backend.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,6 +50,10 @@ public class CourseService {
         // Check if course code already exists
         if (courseRepository.existsByCode(course.getCode())) {
             throw new RuntimeException("Course with code " + course.getCode() + " already exists");
+        }
+        // Set creation date
+        if (course.getCreatedDate() == null) {
+            course.setCreatedDate(LocalDate.now());
         }
         return courseRepository.save(course);
     }

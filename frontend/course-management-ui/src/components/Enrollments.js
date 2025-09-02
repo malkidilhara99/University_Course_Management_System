@@ -37,9 +37,32 @@ export default function Enrollments() {
     completedEnrollments: 0,
     averageGrade: 0
   });
+  const [userRole, setUserRole] = useState(null);
+  const [accessLevel, setAccessLevel] = useState('full');
 
   useEffect(() => {
     fetchEnrollments();
+  }, []);
+
+  // Get user role on component mount
+  useEffect(() => {
+    try {
+      const user = JSON.parse(localStorage.getItem('user'));
+      const role = user?.role || 'STUDENT';
+      setUserRole(role);
+      
+      // Determine access level based on role
+      if (role === 'ADMIN' || role === 'STAFF' || role === 'LECTURER') {
+        setAccessLevel('full');
+      } else if (role === 'STUDENT') {
+        setAccessLevel('limited');
+      } else {
+        setAccessLevel('restricted');
+      }
+    } catch (error) {
+      setUserRole('STUDENT');
+      setAccessLevel('limited');
+    }
   }, []);
 
   async function fetchEnrollments() {
@@ -194,6 +217,21 @@ export default function Enrollments() {
               Enrollment Management
             </h1>
             <p className="header-subtitle">Monitor student course enrollments and academic progress</p>
+            {accessLevel !== 'full' && (
+              <div className="access-notice">
+                {accessLevel === 'limited' ? (
+                  <div className="limited-access-note">
+                    <AlertCircle className="w-4 h-4" />
+                    Student View: View enrollment information for academic collaboration
+                  </div>
+                ) : (
+                  <div className="restricted-access-note">
+                    <XCircle className="w-4 h-4" />
+                    Limited access to enrollment data
+                  </div>
+                )}
+              </div>
+            )}
           </div>
           <div className="header-actions">
             <button className="btn btn-primary" onClick={handleAddEnrollment}>

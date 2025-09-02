@@ -4,9 +4,13 @@ import com.erp.backend.entity.Student;
 import com.erp.backend.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
@@ -17,6 +21,96 @@ public class StudentService {
     // Get all students
     public List<Student> getAllStudents() {
         return studentRepository.findAll();
+    }
+
+    // Get all students based on user role - Students see limited info
+    public List<Student> getAllStudentsBasedOnRole(Authentication authentication) {
+        if (hasAdminOrStaffRole(authentication)) {
+            // Admin/Lecturer see full student details
+            return studentRepository.findAll();
+        } else if (hasStudentRole(authentication)) {
+            // Students see only basic info (name and student ID) - for enrollment purposes
+            List<Student> allStudents = studentRepository.findAll();
+            return allStudents.stream().map(this::createLimitedStudentInfo).collect(Collectors.toList());
+        } else {
+            throw new RuntimeException("Access denied: Insufficient privileges");
+        }
+    }
+
+    // Get student by ID based on role
+    public Student getStudentByIdBasedOnRole(Long id, Authentication authentication) {
+        Optional<Student> studentOpt = studentRepository.findById(id);
+        if (!studentOpt.isPresent()) {
+            throw new RuntimeException("Student not found");
+        }
+
+        Student student = studentOpt.get();
+        
+        if (hasAdminOrStaffRole(authentication)) {
+            // Admin/Lecturer see full details
+            return student;
+        } else if (hasStudentRole(authentication)) {
+            // Students can only see their own full details, limited info for others
+            String userEmail = authentication.getName();
+            if (student.getEmail() != null && student.getEmail().equals(userEmail)) {
+                return student; // Own profile - full details
+            } else {
+                return createLimitedStudentInfo(student); // Others - limited info
+            }
+        } else {
+            throw new RuntimeException("Access denied: Insufficient privileges");
+        }
+    }
+
+    // Update student based on role
+    public Student updateStudentBasedOnRole(Long id, Student studentDetails, Authentication authentication) {
+        if (hasAdminOrStaffRole(authentication)) {
+            // Admin/Lecturer can update any student
+            return updateStudent(id, studentDetails);
+        } else if (hasStudentRole(authentication)) {
+            // Students can only update their own profile
+            Optional<Student> studentOpt = studentRepository.findById(id);
+            if (!studentOpt.isPresent()) {
+                throw new RuntimeException("Student not found");
+            }
+            
+            Student existingStudent = studentOpt.get();
+            String userEmail = authentication.getName();
+            
+            if (existingStudent.getEmail() != null && existingStudent.getEmail().equals(userEmail)) {
+                return updateStudent(id, studentDetails);
+            } else {
+                throw new RuntimeException("Access denied: You can only update your own profile");
+            }
+        } else {
+            throw new RuntimeException("Access denied: Insufficient privileges");
+        }
+    }
+
+    // Create limited student info for student role users
+    private Student createLimitedStudentInfo(Student student) {
+        Student limitedInfo = new Student();
+        limitedInfo.setId(student.getId());
+        limitedInfo.setStudentId(student.getStudentId());
+        limitedInfo.setFirstName(student.getFirstName());
+        limitedInfo.setLastName(student.getLastName());
+        limitedInfo.setMajor(student.getMajor());
+        limitedInfo.setYearLevel(student.getYearLevel());
+        // Email, phone, address, DOB hidden for privacy
+        return limitedInfo;
+    }
+
+    // Helper methods to check roles
+    private boolean hasAdminOrStaffRole(Authentication authentication) {
+        return authentication.getAuthorities().stream()
+                .anyMatch(authority -> 
+                    authority.getAuthority().equals("ROLE_ADMIN") || 
+                    authority.getAuthority().equals("ROLE_LECTURER"));
+    }
+
+    private boolean hasStudentRole(Authentication authentication) {
+        return authentication.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ROLE_STUDENT"));
     }
     
     // Get student by ID
@@ -59,6 +153,11 @@ public class StudentService {
         // Check if email already exists
         if (student.getEmail() != null && studentRepository.existsByEmail(student.getEmail())) {
             throw new RuntimeException("Student with email " + student.getEmail() + " already exists");
+        }
+        
+        // Set enrollment date
+        if (student.getEnrollmentDate() == null) {
+            student.setEnrollmentDate(LocalDate.now());
         }
         
         return studentRepository.save(student);

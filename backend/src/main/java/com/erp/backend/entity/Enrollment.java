@@ -7,7 +7,7 @@ import java.time.LocalDate;
 @Table(name = "enrollments")
 public class Enrollment {
 
-    public enum EnrollmentStatus { ENROLLED, COMPLETED, DROPPED }
+    public enum EnrollmentStatus { ENROLLED, COMPLETED, DROPPED, PENDING }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

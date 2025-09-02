@@ -13,14 +13,14 @@ import {
   Users, 
   GraduationCap, 
   Award, 
-  TrendingUp,
   Mail,
   Phone,
   MapPin,
   Calendar,
   BookOpen,
-  Star,
-  User
+  User,
+  AlertCircle,
+  XCircle
 } from 'lucide-react';
 
 export default function Students() {
@@ -38,8 +38,31 @@ export default function Students() {
     averageGrade: 0,
     activeEnrollments: 0
   });
+  const [accessLevel, setAccessLevel] = useState('full'); // 'full', 'limited', 'restricted'
 
   useEffect(() => {
+    // Get user role from localStorage and determine access level
+    try {
+      const userData = localStorage.getItem('user');
+      if (userData) {
+        const user = JSON.parse(userData);
+        const role = user.role || 'STUDENT';
+        
+        // Determine access level based on role
+        if (role === 'ADMIN' || role === 'STAFF' || role === 'LECTURER') {
+          setAccessLevel('full');
+        } else if (role === 'STUDENT') {
+          setAccessLevel('limited');
+        } else {
+          setAccessLevel('restricted');
+        }
+      } else {
+        setAccessLevel('limited');
+      }
+    } catch (error) {
+      setAccessLevel('limited');
+    }
+    
     fetchStudents();
   }, []);
 
@@ -65,9 +88,24 @@ export default function Students() {
       if (res.ok) {
         const data = await res.json();
         setStudents(data);
+        
+        // Determine access level based on response data
+        if (data.length > 0 && data[0].email) {
+          setAccessLevel('full'); // Admin/Staff - full access
+        } else if (data.length > 0) {
+          setAccessLevel('limited'); // Student - limited info
+        } else {
+          setAccessLevel('restricted'); // No access
+        }
+        
         await calculateStats(data);
+      } else if (res.status === 403) {
+        setAccessLevel('restricted');
+        setStudents([]);
+        console.warn('Access restricted - insufficient privileges');
       } else {
         console.error('Failed to fetch students:', res.status, res.statusText);
+        setStudents([]);
       }
     } catch (error) {
       console.error('Error fetching students:', error);
@@ -139,13 +177,32 @@ export default function Students() {
               <Users className="title-icon" />
               Student Management
             </h1>
-            <p className="page-subtitle">Manage student records and academic performance</p>
+            <p className="page-subtitle">
+              {accessLevel === 'full' && 'Manage student records and academic performance'}
+              {accessLevel === 'limited' && 'View student directory and information'}
+              {accessLevel === 'restricted' && 'Access restricted - contact administrator for access'}
+            </p>
+            {accessLevel === 'limited' && (
+              <div className="access-notice">
+                <span className="notice-text">
+                  📋 Student View: You can view student information for academic collaboration. 
+                  Only administrators can add new students.
+                </span>
+              </div>
+            )}
           </div>
           <div className="header-actions">
-            <button className="add-student-btn" onClick={() => setModalOpen(true)}>
-              <Plus size={20} />
-              Add New Student
-            </button>
+            {(accessLevel === 'full') && (
+              <button className="add-student-btn" onClick={() => setModalOpen(true)}>
+                <Plus size={20} />
+                Add New Student
+              </button>
+            )}
+            {accessLevel === 'limited' && (
+              <div className="limited-access-note">
+                <span>Limited access - enrollment purposes only</span>
+              </div>
+            )}
           </div>
         </div>
       </div>

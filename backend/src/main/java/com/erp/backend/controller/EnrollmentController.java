@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 
 import jakarta.validation.Valid;
 import java.util.List;
@@ -21,26 +22,30 @@ public class EnrollmentController {
     private EnrollmentService enrollmentService;
 
     @GetMapping
-    public ResponseEntity<List<Enrollment>> getAllEnrollments() {
-        List<Enrollment> enrollments = enrollmentService.getAllEnrollments();
-        return ResponseEntity.ok(enrollments);
+    public ResponseEntity<List<Enrollment>> getAllEnrollments(Authentication authentication) {
+        try {
+            List<Enrollment> enrollments = enrollmentService.getAllEnrollmentsBasedOnRole(authentication);
+            return ResponseEntity.ok(enrollments);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Enrollment> getEnrollmentById(@PathVariable Long id) {
+    public ResponseEntity<Enrollment> getEnrollmentById(@PathVariable Long id, Authentication authentication) {
         try {
-            Enrollment enrollment = enrollmentService.getEnrollmentById(id);
+            Enrollment enrollment = enrollmentService.getEnrollmentByIdBasedOnRole(id, authentication);
             return ResponseEntity.ok(enrollment);
         } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
     }
 
     @PostMapping("/student-enroll")
     @PreAuthorize("hasRole('STUDENT')")
-    public ResponseEntity<Enrollment> enrollStudentInCourse(@Valid @RequestBody EnrollmentRequest request) {
+    public ResponseEntity<Enrollment> enrollStudentInCourse(@Valid @RequestBody EnrollmentRequest request, Authentication authentication) {
         try {
-            Enrollment createdEnrollment = enrollmentService.createEnrollment(request.getStudentId(), request.getCourseId(), request.getStatus());
+            Enrollment createdEnrollment = enrollmentService.createStudentSelfEnrollment(request, authentication);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdEnrollment);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(null);
@@ -48,6 +53,7 @@ public class EnrollmentController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN') or hasRole('LECTURER')")
     public ResponseEntity<Enrollment> createEnrollment(@Valid @RequestBody EnrollmentCreateRequest request) {
         try {
             Enrollment createdEnrollment = enrollmentService.createEnrollment(request.getStudentId(), request.getCourseId(), request.getStatus());
@@ -58,6 +64,7 @@ public class EnrollmentController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('LECTURER')")
     public ResponseEntity<Enrollment> updateEnrollment(@PathVariable Long id, @Valid @RequestBody Enrollment enrollment) {
         try {
             enrollment.setId(id);
@@ -69,6 +76,7 @@ public class EnrollmentController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('LECTURER')")
     public ResponseEntity<Void> deleteEnrollment(@PathVariable Long id) {
         try {
             enrollmentService.deleteEnrollment(id);
@@ -79,9 +87,13 @@ public class EnrollmentController {
     }
 
     @GetMapping("/student/{studentId}")
-    public ResponseEntity<List<Enrollment>> getEnrollmentsByStudent(@PathVariable String studentId) {
-        List<Enrollment> enrollments = enrollmentService.getEnrollmentsByStudentId(studentId);
-        return ResponseEntity.ok(enrollments);
+    public ResponseEntity<List<Enrollment>> getEnrollmentsByStudent(@PathVariable String studentId, Authentication authentication) {
+        try {
+            List<Enrollment> enrollments = enrollmentService.getEnrollmentsByStudentBasedOnRole(studentId, authentication);
+            return ResponseEntity.ok(enrollments);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }
     }
 
     @GetMapping("/course/{courseId}")

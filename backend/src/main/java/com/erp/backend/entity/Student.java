@@ -25,6 +25,7 @@ public class Student {
     private String address;
     private String major;
     private Integer yearLevel;
+    private LocalDate enrollmentDate;
 
     // Getters and setters
     public Long getId() { return id; }
@@ -56,4 +57,7 @@ public class Student {
 
     public Integer getYearLevel() { return yearLevel; }
     public void setYearLevel(Integer yearLevel) { this.yearLevel = yearLevel; }
+
+    public LocalDate getEnrollmentDate() { return enrollmentDate; }
+    public void setEnrollmentDate(LocalDate enrollmentDate) { this.enrollmentDate = enrollmentDate; }
 }
