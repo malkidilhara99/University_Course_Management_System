@@ -1,8 +1,82 @@
-.auth-root{display:flex;align-items:center;justify-content:center;padding:28px}
-.auth-card{width:100%;max-width:520px;background:var(--card);padding:22px;border-radius:12px;border:1px solid rgba(15,23,42,0.04);box-shadow:0 6px 20px rgba(16,24,40,0.06);display:flex;flex-direction:column;gap:10px}
-.auth-card h2{margin:0 0 6px}
-.auth-card label{font-size:0.9rem;color:var(--muted)}
-.auth-card input{padding:10px;border-radius:8px;border:1px solid rgba(15,23,42,0.06);background:var(--surface);color:var(--white)}
-.auth-actions{display:flex;justify-content:flex-end;margin-top:8px}
-.btn-primary{background:var(--accent);color:white;padding:10px 14px;border-radius:10px;border:none}
-.helper{font-size:0.9rem;color:var(--muted)}
+
+.auth-root {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 100vh;
+	background: linear-gradient(120deg, #f0f4f8 0%, #e9eafc 100%);
+}
+
+.auth-card {
+	width: 100%;
+	max-width: 420px;
+	background: #fff;
+	padding: 32px 28px;
+	border-radius: 16px;
+	border: 1px solid #e0e7ef;
+	box-shadow: 0 8px 32px rgba(16,24,40,0.10);
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.auth-card h2 {
+	margin: 0 0 12px;
+	font-size: 2rem;
+	font-weight: 700;
+	color: #2d3748;
+	text-align: center;
+}
+
+.auth-card label {
+	font-size: 1rem;
+	color: #4a5568;
+	margin-bottom: 4px;
+	font-weight: 500;
+}
+
+.auth-card input,
+.auth-card select {
+	padding: 12px;
+	border-radius: 8px;
+	border: 1px solid #cbd5e1;
+	background: #f7fafc;
+	color: #2d3748;
+	font-size: 1rem;
+	margin-bottom: 10px;
+	transition: border-color 0.2s;
+}
+
+.auth-card input:focus,
+.auth-card select:focus {
+	border-color: #6366f1;
+	outline: none;
+}
+
+.auth-actions {
+	display: flex;
+	justify-content: flex-end;
+	margin-top: 12px;
+}
+
+.btn-primary {
+	background: linear-gradient(90deg, #6366f1 0%, #60a5fa 100%);
+	color: white;
+	padding: 12px 20px;
+	border-radius: 10px;
+	border: none;
+	font-size: 1rem;
+	font-weight: 600;
+	box-shadow: 0 2px 8px rgba(99,102,241,0.10);
+	cursor: pointer;
+	transition: background 0.2s;
+}
+.btn-primary:hover {
+	background: linear-gradient(90deg, #4338ca 0%, #2563eb 100%);
+}
+
+.helper {
+	font-size: 0.95rem;
+	color: #64748b;
+	text-align: center;
+}
