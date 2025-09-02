@@ -478,6 +478,16 @@
   background: #fee2e2;
 }
 
+.action-btn.grade {
+  background: #f0fdf4;
+  color: #059669;
+}
+
+.action-btn.grade:hover {
+  background: #dcfce7;
+  transform: translateY(-1px);
+}
+
 .action-icon {
   width: 1rem;
   height: 1rem;

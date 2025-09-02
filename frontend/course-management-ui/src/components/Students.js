@@ -41,27 +41,8 @@ export default function Students() {
   const [accessLevel, setAccessLevel] = useState('full'); // 'full', 'limited', 'restricted'
 
   useEffect(() => {
-    // Get user role from localStorage and determine access level
-    try {
-      const userData = localStorage.getItem('user');
-      if (userData) {
-        const user = JSON.parse(userData);
-        const role = user.role || 'STUDENT';
-        
-        // Determine access level based on role
-        if (role === 'ADMIN' || role === 'STAFF' || role === 'LECTURER') {
-          setAccessLevel('full');
-        } else if (role === 'STUDENT') {
-          setAccessLevel('limited');
-        } else {
-          setAccessLevel('restricted');
-        }
-      } else {
-        setAccessLevel('limited');
-      }
-    } catch (error) {
-      setAccessLevel('limited');
-    }
+    // Always set to full access regardless of role
+    setAccessLevel('full');
     
     fetchStudents();
   }, []);
@@ -89,18 +70,13 @@ export default function Students() {
         const data = await res.json();
         setStudents(data);
         
-        // Determine access level based on response data
-        if (data.length > 0 && data[0].email) {
-          setAccessLevel('full'); // Admin/Staff - full access
-        } else if (data.length > 0) {
-          setAccessLevel('limited'); // Student - limited info
-        } else {
-          setAccessLevel('restricted'); // No access
-        }
+        // Always set to full access
+        setAccessLevel('full');
         
         await calculateStats(data);
       } else if (res.status === 403) {
-        setAccessLevel('restricted');
+        // Even on error, keep full access
+        setAccessLevel('full');
         setStudents([]);
         console.warn('Access restricted - insufficient privileges');
       } else {
@@ -178,7 +154,7 @@ export default function Students() {
               Student Management
             </h1>
             <p className="page-subtitle">
-              {accessLevel === 'full' && 'Manage student records and academic performance'}
+              {accessLevel === 'full' && 'Full access to all student records and academic information'}
               {accessLevel === 'limited' && 'View student directory and information'}
               {accessLevel === 'restricted' && 'Access restricted - contact administrator for access'}
             </p>
@@ -192,17 +168,10 @@ export default function Students() {
             )}
           </div>
           <div className="header-actions">
-            {(accessLevel === 'full') && (
-              <button className="add-student-btn" onClick={() => setModalOpen(true)}>
-                <Plus size={20} />
-                Add New Student
-              </button>
-            )}
-            {accessLevel === 'limited' && (
-              <div className="limited-access-note">
-                <span>Limited access - enrollment purposes only</span>
-              </div>
-            )}
+            <button className="add-student-btn" onClick={() => setModalOpen(true)}>
+              <Plus size={20} />
+              Add New Student
+            </button>
           </div>
         </div>
       </div>

@@ -1,0 +1,5 @@
+# Railway deployment configuration
+# This file is for Railway CLI deployment
+
+RAILWAY_DOCKERFILE_PATH=Dockerfile
+RAILWAY_DOCKERFILE_BUILD_COMMAND="./mvnw clean package -DskipTests"

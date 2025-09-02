@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import './StudentForm.css';
-import { User, Mail, GraduationCap, Save, Loader } from 'lucide-react';
+import { User, Mail, GraduationCap, Save, Loader, Phone } from 'lucide-react';
 
 export default function StudentForm({ onCreated }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [major, setMajor] = useState('');
   const [studentId, setStudentId] = useState('');
+  const [phone, setPhone] = useState('');
+  const [yearLevel, setYearLevel] = useState('');
   const [saving, setSaving] = useState(false);
   const [note, setNote] = useState(null);
 
@@ -16,10 +18,14 @@ export default function StudentForm({ onCreated }) {
     setNote(null);
     
     const payload = { 
-      name, 
+      firstName: name.split(' ')[0] || '',
+      lastName: name.split(' ').slice(1).join(' ') || '',
       email, 
       major,
-      studentId: studentId || `ST${Date.now().toString().slice(-6)}` // Generate ID if not provided
+      phone,
+      yearLevel: yearLevel ? parseInt(yearLevel) : null,
+      studentId: studentId || `ST${Date.now().toString().slice(-6)}`, // Generate ID if not provided
+      enrollmentDate: new Date().toISOString().split('T')[0] // Set enrollment date to today
     };
     
     try {
@@ -47,6 +53,8 @@ export default function StudentForm({ onCreated }) {
       setEmail(''); 
       setMajor('');
       setStudentId('');
+      setPhone('');
+      setYearLevel('');
       onCreated && onCreated(created);
     } catch (err) {
       console.warn('Student create failed, simulating success', err.message);
@@ -126,6 +134,37 @@ export default function StudentForm({ onCreated }) {
               className="form-input"
               placeholder="Auto-generated if empty"
             />
+          </div>
+
+          <div className="form-field">
+            <label className="form-label">
+              Phone Number
+            </label>
+            <input 
+              type="tel"
+              value={phone} 
+              onChange={e=>setPhone(e.target.value)} 
+              className="form-input"
+              placeholder="e.g., +1 555-123-4567"
+            />
+          </div>
+
+          <div className="form-field">
+            <label className="form-label">
+              Year Level
+            </label>
+            <select 
+              value={yearLevel} 
+              onChange={e=>setYearLevel(e.target.value)} 
+              className="form-input"
+            >
+              <option value="">Select year level</option>
+              <option value="1">1st Year (Freshman)</option>
+              <option value="2">2nd Year (Sophomore)</option>
+              <option value="3">3rd Year (Junior)</option>
+              <option value="4">4th Year (Senior)</option>
+              <option value="5">5th Year+</option>
+            </select>
           </div>
         </div>
 

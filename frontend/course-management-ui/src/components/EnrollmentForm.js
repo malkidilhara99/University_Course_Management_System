@@ -15,7 +15,9 @@ export default function EnrollmentForm({ onClose, onSubmit, editingEnrollment = 
     studentId: '',
     courseId: '',
     status: 'ENROLLED',
-    enrollmentDate: new Date().toISOString().split('T')[0]
+    enrollmentDate: new Date().toISOString().split('T')[0],
+    grade: '',
+    score: ''
   });
   
   const [students, setStudents] = useState([]);
@@ -35,7 +37,9 @@ export default function EnrollmentForm({ onClose, onSubmit, editingEnrollment = 
         status: editingEnrollment.status || 'ENROLLED',
         enrollmentDate: editingEnrollment.enrollmentDate 
           ? new Date(editingEnrollment.enrollmentDate).toISOString().split('T')[0]
-          : new Date().toISOString().split('T')[0]
+          : new Date().toISOString().split('T')[0],
+        grade: editingEnrollment.grade || '',
+        score: editingEnrollment.score || ''
       });
     }
   }, [editingEnrollment]);
@@ -130,7 +134,9 @@ export default function EnrollmentForm({ onClose, onSubmit, editingEnrollment = 
       const enrollmentData = {
         studentId: parseInt(formData.studentId),
         courseId: parseInt(formData.courseId),
-        status: formData.status
+        status: formData.status,
+        grade: formData.grade || null,
+        score: formData.score ? parseFloat(formData.score) : null
       };
 
       const url = editingEnrollment 
@@ -146,7 +152,27 @@ export default function EnrollmentForm({ onClose, onSubmit, editingEnrollment = 
       });
 
       if (res.ok) {
-        const savedEnrollment = await res.json();
+        let savedEnrollment = await res.json();
+        
+        // If grade information provided and we're editing an enrollment, update the grade separately
+        // This is only needed if the backend doesn't accept grade in the main enrollment endpoint
+        if (editingEnrollment && (formData.grade || formData.score)) {
+          const gradeData = {
+            grade: formData.grade || null,
+            score: formData.score ? parseFloat(formData.score) : null
+          };
+
+          const gradeRes = await fetch(`${API_BASE}/api/enrollments/${editingEnrollment.id}/grade`, {
+            method: 'PUT',
+            headers: headers,
+            body: JSON.stringify(gradeData)
+          });
+
+          if (gradeRes.ok) {
+            savedEnrollment = await gradeRes.json();
+          }
+        }
+        
         setSuccess(editingEnrollment ? 'Enrollment updated successfully!' : 'Enrollment created successfully!');
         
         setTimeout(() => {
@@ -171,7 +197,9 @@ export default function EnrollmentForm({ onClose, onSubmit, editingEnrollment = 
       studentId: '',
       courseId: '',
       status: 'ENROLLED',
-      enrollmentDate: new Date().toISOString().split('T')[0]
+      enrollmentDate: new Date().toISOString().split('T')[0],
+      grade: '',
+      score: ''
     });
     setError('');
     setSuccess('');
@@ -293,6 +321,61 @@ export default function EnrollmentForm({ onClose, onSubmit, editingEnrollment = 
               required
             />
           </div>
+
+          {/* Grade Information Section - Always visible */}
+          <>
+            <div className="form-section-header">
+              <h3>Grade Information</h3>
+              <p className="form-section-subtitle">Add or update student grade</p>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="grade" className="form-label">
+                Letter Grade
+              </label>
+              <select
+                id="grade"
+                name="grade"
+                value={formData.grade}
+                onChange={handleInputChange}
+                className="form-select"
+              >
+                <option value="">No grade assigned</option>
+                <option value="A+">A+ (97-100)</option>
+                <option value="A">A (93-96)</option>
+                <option value="A-">A- (90-92)</option>
+                <option value="B+">B+ (87-89)</option>
+                <option value="B">B (83-86)</option>
+                <option value="B-">B- (80-82)</option>
+                <option value="C+">C+ (77-79)</option>
+                <option value="C">C (73-76)</option>
+                <option value="C-">C- (70-72)</option>
+                <option value="D+">D+ (67-69)</option>
+                <option value="D">D (63-66)</option>
+                <option value="D-">D- (60-62)</option>
+                <option value="F">F (0-59)</option>
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="score" className="form-label">
+                Numerical Score (0-100)
+              </label>
+              <input
+                type="number"
+                id="score"
+                name="score"
+                min="0"
+                max="100"
+                step="0.1"
+                value={formData.score}
+                onChange={handleInputChange}
+                className="form-input"
+                placeholder="Enter score (optional)"
+              />
+            </div>
+          </>
+          
 
           <div className="form-actions">
             <button

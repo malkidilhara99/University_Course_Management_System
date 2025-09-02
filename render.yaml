@@ -1,0 +1,40 @@
+services:
+  # Backend service
+  - type: web
+    name: ucms-backend
+    runtime: docker
+    repo: https://github.com/malkidilhara99/University_Course_Management_System.git
+    rootDir: backend
+    dockerfilePath: Dockerfile
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: SPRING_DATASOURCE_URL
+        fromDatabase:
+          name: ucms-database
+          property: connectionString
+      - key: SPRING_DATASOURCE_USERNAME
+        fromDatabase:
+          name: ucms-database
+          property: user
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromDatabase:
+          name: ucms-database
+          property: password
+
+  # Frontend service
+  - type: web
+    name: ucms-frontend
+    runtime: docker
+    repo: https://github.com/malkidilhara99/University_Course_Management_System.git
+    rootDir: frontend/course-management-ui
+    dockerfilePath: Dockerfile
+    envVars:
+      - key: REACT_APP_API_BASE
+        value: https://${services.ucms-backend.url}
+
+databases:
+  - name: ucms-database
+    databaseName: university_cms
+    plan: free

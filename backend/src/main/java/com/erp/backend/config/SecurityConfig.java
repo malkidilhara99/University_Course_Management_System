@@ -39,19 +39,13 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter) throws Exception {
-    http.csrf().disable()
-        .cors().and()
-        .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/api/auth/**", "/actuator/**").permitAll()
-            .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/courses/**").permitAll() // Allow GET for courses
-            .requestMatchers("/api/students/**").permitAll() // Allow all operations for students
-            .requestMatchers("/api/enrollments/**").permitAll() // Allow all operations for enrollments
-            .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll() // Allow preflight
-            .anyRequest().authenticated()
-        )
-        .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
-    http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-    return http.build();
+        return http
+            .csrf(csrf -> csrf.disable())
+            .cors(cors -> {})
+            .authorizeHttpRequests(auth -> auth
+                .anyRequest().permitAll() // Allow ALL requests without authentication
+            )
+            .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .build();
     }
 }

@@ -51,9 +51,9 @@ export default function Enrollments() {
       const role = user?.role || 'STUDENT';
       setUserRole(role);
       
-      // Determine access level based on role
+      // Determine access level based on role - ADMIN/LECTURER get FULL access
       if (role === 'ADMIN' || role === 'STAFF' || role === 'LECTURER') {
-        setAccessLevel('full');
+        setAccessLevel('full'); // FULL ACCESS - NO RESTRICTIONS ANYWHERE
       } else if (role === 'STUDENT') {
         setAccessLevel('limited');
       } else {
@@ -216,7 +216,7 @@ export default function Enrollments() {
               <GraduationCap className="header-icon" />
               Enrollment Management
             </h1>
-            <p className="header-subtitle">Monitor student course enrollments and academic progress</p>
+            <p className="header-subtitle">Full access to all enrollment records and academic management</p>
             {accessLevel !== 'full' && (
               <div className="access-notice">
                 {accessLevel === 'limited' ? (
@@ -370,6 +370,11 @@ export default function Enrollments() {
                     <button className="action-btn view" title="View Details">
                       <Eye className="action-icon" />
                     </button>
+                    {accessLevel === 'full' && (
+                      <button className="action-btn grade" title="Add/Update Grade" onClick={() => handleEditEnrollment(enrollment)}>
+                        <Award className="action-icon" />
+                      </button>
+                    )}
                     <button className="action-btn edit" title="Edit Enrollment" onClick={() => handleEditEnrollment(enrollment)}>
                       <Edit className="action-icon" />
                     </button>
@@ -411,15 +416,25 @@ export default function Enrollments() {
                       </span>
                     </div>
 
-                    {enrollment.grade && (
-                      <div className="detail-item">
-                        <Award className="detail-icon" />
-                        <span className="detail-label">Grade:</span>
-                        <span className="detail-value grade">
-                          {enrollment.grade}
-                        </span>
-                      </div>
-                    )}
+                    <div className="detail-item">
+                      <Award className="detail-icon" />
+                      <span className="detail-label">Grade:</span>
+                      <span className="detail-value grade">
+                        {enrollment.grade ? 
+                          <strong className="grade-value">{enrollment.grade}</strong> : 
+                          <span className="no-grade">Not graded</span>}
+                      </span>
+                    </div>
+                    
+                    <div className="detail-item">
+                      <TrendingUp className="detail-icon" />
+                      <span className="detail-label">Score:</span>
+                      <span className="detail-value">
+                        {enrollment.score ? 
+                          <strong>{enrollment.score}/100</strong> : 
+                          <span className="no-grade">Not scored</span>}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>

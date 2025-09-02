@@ -23,11 +23,12 @@ public class StudentService {
         return studentRepository.findAll();
     }
 
-    // Get all students based on user role - Students see limited info
+    // Get all students based on user role - ADMIN/LECTURER see ALL details
     public List<Student> getAllStudentsBasedOnRole(Authentication authentication) {
         if (hasAdminOrStaffRole(authentication)) {
-            // Admin/Lecturer see full student details
-            return studentRepository.findAll();
+            // Admin/Lecturer see FULL student details - NO RESTRICTIONS
+            List<Student> students = studentRepository.findAll();
+            return students; // Return complete student objects with ALL fields
         } else if (hasStudentRole(authentication)) {
             // Students see only basic info (name and student ID) - for enrollment purposes
             List<Student> allStudents = studentRepository.findAll();
@@ -37,7 +38,7 @@ public class StudentService {
         }
     }
 
-    // Get student by ID based on role
+    // Get student by ID based on role - ADMIN/LECTURER see ALL details
     public Student getStudentByIdBasedOnRole(Long id, Authentication authentication) {
         Optional<Student> studentOpt = studentRepository.findById(id);
         if (!studentOpt.isPresent()) {
@@ -47,8 +48,8 @@ public class StudentService {
         Student student = studentOpt.get();
         
         if (hasAdminOrStaffRole(authentication)) {
-            // Admin/Lecturer see full details
-            return student;
+            // Admin/Lecturer see FULL details - NO RESTRICTIONS WHATSOEVER
+            return student; // Return complete student object with ALL fields
         } else if (hasStudentRole(authentication)) {
             // Students can only see their own full details, limited info for others
             String userEmail = authentication.getName();
@@ -62,10 +63,10 @@ public class StudentService {
         }
     }
 
-    // Update student based on role
+    // Update student based on role - ADMIN/LECTURER can update ANY student
     public Student updateStudentBasedOnRole(Long id, Student studentDetails, Authentication authentication) {
         if (hasAdminOrStaffRole(authentication)) {
-            // Admin/Lecturer can update any student
+            // Admin/Lecturer can update ANY student - NO RESTRICTIONS
             return updateStudent(id, studentDetails);
         } else if (hasStudentRole(authentication)) {
             // Students can only update their own profile
@@ -105,7 +106,8 @@ public class StudentService {
         return authentication.getAuthorities().stream()
                 .anyMatch(authority -> 
                     authority.getAuthority().equals("ROLE_ADMIN") || 
-                    authority.getAuthority().equals("ROLE_LECTURER"));
+                    authority.getAuthority().equals("ROLE_LECTURER") ||
+                    authority.getAuthority().equals("ROLE_STAFF"));
     }
 
     private boolean hasStudentRole(Authentication authentication) {

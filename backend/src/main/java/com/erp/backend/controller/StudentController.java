@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 
 import jakarta.validation.Valid;
 import java.util.List;
@@ -20,25 +18,26 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
     
-    // Get all students - Students can see limited info, Admins/Staff see full details
+    // Get all students
     @GetMapping
-    public ResponseEntity<List<Student>> getAllStudents(Authentication authentication) {
+    public ResponseEntity<List<Student>> getAllStudents() {
         try {
-            List<Student> students = studentService.getAllStudentsBasedOnRole(authentication);
+            List<Student> students = studentService.getAllStudents();
             return ResponseEntity.ok(students);
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
     
-    // Get student by ID - Role-based access control
+    // Get student by ID - No role-based access control
     @GetMapping("/{id}")
-    public ResponseEntity<Student> getStudentById(@PathVariable Long id, Authentication authentication) {
+    public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
         try {
-            Student student = studentService.getStudentByIdBasedOnRole(id, authentication);
-            return ResponseEntity.ok(student);
+            return studentService.getStudentById(id)
+                .map(student -> ResponseEntity.ok(student))
+                .orElseGet(() -> ResponseEntity.notFound().build());
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+            return ResponseEntity.notFound().build();
         }
     }
     
@@ -79,9 +78,8 @@ public class StudentController {
         return ResponseEntity.ok(students);
     }
     
-    // Create new student - Admin/Lecturer only
+    // Create new student - No restrictions
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN') or hasRole('LECTURER')")
     public ResponseEntity<Student> createStudent(@Valid @RequestBody Student student) {
         try {
             Student createdStudent = studentService.createStudent(student);
@@ -91,20 +89,19 @@ public class StudentController {
         }
     }
     
-    // Update existing student - Role-based restrictions
+    // Update existing student - No restrictions
     @PutMapping("/{id}")
-    public ResponseEntity<Student> updateStudent(@PathVariable Long id, @Valid @RequestBody Student studentDetails, Authentication authentication) {
+    public ResponseEntity<Student> updateStudent(@PathVariable Long id, @Valid @RequestBody Student studentDetails) {
         try {
-            Student updatedStudent = studentService.updateStudentBasedOnRole(id, studentDetails, authentication);
+            Student updatedStudent = studentService.updateStudent(id, studentDetails);
             return ResponseEntity.ok(updatedStudent);
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            return ResponseEntity.notFound().build();
         }
     }
     
-    // Delete student - Admin only
+    // Delete student - No restrictions
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
         try {
             studentService.deleteStudent(id);

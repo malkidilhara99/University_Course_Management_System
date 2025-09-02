@@ -1,0 +1,52 @@
+# Production configuration for the Spring Boot backend
+# This file will be activated when SPRING_PROFILES_ACTIVE=prod
+
+spring:
+  datasource:
+    # These will be overridden by environment variables in production
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/university_cms?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD:root}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate # Use 'validate' in production for safety
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+  
+  # Add connection pool configuration for production
+  datasource.hikari:
+    connection-timeout: 30000
+    maximum-pool-size: 10
+    minimum-idle: 5
+    idle-timeout: 120000
+    max-lifetime: 1800000
+
+# Security settings
+security:
+  jwt:
+    secret: ${JWT_SECRET:defaultsecretkeythatwillbeoverridden}
+    expiration: 86400000 # 24 hours in milliseconds
+
+# Logging configuration for production
+logging:
+  level:
+    root: INFO
+    org.springframework: INFO
+    com.erp.backend: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: ./logs/application.log
+
+# Server configuration
+server:
+  port: ${PORT:8080}
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,application/javascript,application/json
+    min-response-size: 1024
+  http2:
+    enabled: true

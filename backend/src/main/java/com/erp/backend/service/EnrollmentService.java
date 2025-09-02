@@ -31,10 +31,10 @@ public class EnrollmentService {
         return enrollmentRepository.findAll();
     }
 
-    // Get all enrollments based on user role
+    // Get all enrollments based on user role - ADMIN/LECTURER see ALL
     public List<Enrollment> getAllEnrollmentsBasedOnRole(Authentication authentication) {
         if (hasAdminOrStaffRole(authentication)) {
-            // Admin/Lecturer see all enrollments
+            // Admin/Lecturer see ALL enrollments - NO RESTRICTIONS
             return enrollmentRepository.findAll();
         } else if (hasStudentRole(authentication)) {
             // Students see only their own enrollments
@@ -47,13 +47,13 @@ public class EnrollmentService {
         }
     }
 
-    // Get enrollment by ID based on role
+    // Get enrollment by ID based on role - ADMIN/LECTURER see ALL
     public Enrollment getEnrollmentByIdBasedOnRole(Long id, Authentication authentication) {
         Enrollment enrollment = enrollmentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Enrollment not found with id: " + id));
 
         if (hasAdminOrStaffRole(authentication)) {
-            // Admin/Lecturer see any enrollment
+            // Admin/Lecturer see ANY enrollment - NO RESTRICTIONS
             return enrollment;
         } else if (hasStudentRole(authentication)) {
             // Students can only see their own enrollments
@@ -123,7 +123,8 @@ public class EnrollmentService {
         return authentication.getAuthorities().stream()
                 .anyMatch(authority -> 
                     authority.getAuthority().equals("ROLE_ADMIN") || 
-                    authority.getAuthority().equals("ROLE_LECTURER"));
+                    authority.getAuthority().equals("ROLE_LECTURER") ||
+                    authority.getAuthority().equals("ROLE_STAFF"));
     }
 
     private boolean hasStudentRole(Authentication authentication) {
