@@ -10,3 +10,4 @@ A comprehensive system for managing university courses, students, enrollments, a
 - Grade Tracking
 - User Authentication
 
+![alt text](image.png)
