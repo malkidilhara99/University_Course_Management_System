@@ -11,3 +11,4 @@ A comprehensive system for managing university courses, students, enrollments, a
 - User Authentication
 
 ![alt text](image.png)
+![alt text](image-1.png)
