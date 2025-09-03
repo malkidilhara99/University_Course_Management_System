@@ -1,0 +1,18 @@
+# Netlify configuration file
+
+# Build settings
+[build]
+  base = "frontend/course-management-ui"
+  publish = "build"
+  command = "npm ci --legacy-peer-deps && npm run build"
+
+# Environment variables
+[build.environment]
+  # This will be replaced with the actual Railway backend URL after deployment
+  REACT_APP_API_BASE = "https://university-cms-backend.up.railway.app"
+
+# Redirects for client-side routing (React Router)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
