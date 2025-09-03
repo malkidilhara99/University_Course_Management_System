@@ -15,7 +15,7 @@ export default function Home(){
         <p className="hero-sub">An enterprise-grade platform to manage courses, student records, registrations, and academic workflows.</p>
 
         <div className="hero-actions">
-          <Link to="/dashboard" className="btn primary hero-btn"><BookOpen size={18} style={{marginRight:10}}/> Explore Courses</Link>
+          <Link to="/courses" className="btn primary hero-btn"><BookOpen size={18} style={{marginRight:10}}/> Explore Courses</Link>
           <Link to="/students" className="btn success hero-btn"><Users size={18} style={{marginRight:10}}/> View Students</Link>
         </div>
       </div>
@@ -27,7 +27,7 @@ export default function Home(){
         <div className="feature-ico"><BookOpen /></div>
         <h3>Course Catalog &amp; Scheduling</h3>
         <p>Create and organize course offerings, set credits, and manage departments and schedules.</p>
-        <div className="feature-cta"><Link to="/dashboard" className="btn outline">Explore Courses</Link></div>
+        <div className="feature-cta"><Link to="/courses" className="btn outline">Explore Courses</Link></div>
       </div>
 
       <div className="feature">
