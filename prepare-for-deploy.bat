@@ -4,7 +4,7 @@ echo ===================================================
 echo    University Course Management System Deployer
 echo ===================================================
 echo.
-echo This script will help prepare your project for deployment to:
+echo This script will help prepare the project for deployment to:
 echo  1) Netlify (Frontend)
 echo  2) Railway (Backend and Database)
 echo.
@@ -48,10 +48,10 @@ echo ===================================================
 echo            Preparation Complete!
 echo ===================================================
 echo.
-echo Your project is now ready for deployment.
+echo The project is now ready for deployment.
 echo.
 echo Next steps:
-echo  1. Commit and push your changes to GitHub:
+echo  1. Commit and push changes to GitHub:
 echo     git add .
 echo     git commit -m "Prepare for deployment"
 echo     git push

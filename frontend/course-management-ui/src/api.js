@@ -8,13 +8,13 @@ const getApiBase = () => {
 
   // For GitHub Pages deployment
   if (window.location.hostname === 'malkidilhara99.github.io') {
-    // You can change this to your actual backend URL when deployed
+    // Change to the actual backend URL when deployed
     return 'http://api.university-cms.example';
   }
 
   // For Netlify deployment
   if (window.location.hostname.includes('netlify.app')) {
-    // Replace with your actual Railway backend URL once deployed
+    // Replace with the actual Railway backend URL once deployed
     return 'https://university-cms-backend.up.railway.app';
   }
 

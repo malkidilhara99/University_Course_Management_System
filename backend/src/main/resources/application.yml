@@ -1,5 +1,5 @@
 # Spring Boot application configuration
-# Optional: configure MySQL datasource. If you run MySQL in Docker as suggested, these
+# Optional: configure MySQL datasource. When running MySQL in Docker as suggested, these
 # values will connect the app to that database.
 
 spring:
@@ -24,7 +24,7 @@ logging:
     org.springframework: INFO
     com.erp: DEBUG
 
-# If you prefer to keep using H2 for quick development, remove or override the
+# For H2 database use in quick development, remove or override the
 # spring.datasource.* properties above. The app already includes H2 in the pom.xml.
 
 # Notes:

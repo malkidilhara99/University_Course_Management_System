@@ -34,13 +34,13 @@ docker push $DOCKER_USERNAME/$FRONTEND_IMAGE_NAME:$VERSION
 cd ../..
 
 echo "========== Deployment preparation complete! =========="
-echo "Your images are now available at:"
+echo "Images are now available at:"
 echo "- $DOCKER_USERNAME/$BACKEND_IMAGE_NAME:$VERSION"
 echo "- $DOCKER_USERNAME/$FRONTEND_IMAGE_NAME:$VERSION"
 echo ""
 echo "Next steps:"
-echo "1. Use these images in your deployment to Render/Heroku/Railway"
+echo "1. Use these images in deployment to Render/Heroku/Railway"
 echo "2. Set the required environment variables as described in DEPLOYMENT.md"
-echo "3. Configure your database connection"
+echo "3. Configure the database connection"
 echo ""
 echo "For detailed deployment instructions, see DEPLOYMENT.md"

@@ -8,7 +8,7 @@ docker-compose down
 echo Building and starting containers...
 docker-compose up --build -d
 
-echo Containers started! Your application is now running at:
+echo Containers started! The application is now running at:
 echo Frontend: http://localhost:3002
 echo Backend API: http://localhost:8080
 echo MySQL Database: localhost:3306

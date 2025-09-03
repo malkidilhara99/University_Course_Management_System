@@ -3,7 +3,7 @@ Quick Docker setup
 This repo includes a Docker configuration to run MySQL, the Spring Boot backend, and the built frontend.
 
 Requirements
-- Docker and Docker Compose installed on your machine.
+- Docker and Docker Compose installed on the system.
 
 Start everything
 
@@ -27,7 +27,7 @@ Cleanup
 - Stop and remove containers:
   docker compose down -v
 
-If you'd like, I can:
+Additional options:
 - Add healthchecks to the compose services.
 - Configure environment files with secrets.
 - Add a Makefile for convenience targets.

@@ -2,7 +2,7 @@
 CREATE DATABASE IF NOT EXISTS university_cms;
 USE university_cms;
 
--- You can add table creation and initial data here if needed
+-- Add table creation and initial data here if needed
 -- Example:
 -- CREATE TABLE IF NOT EXISTS sample_table (
 --    id INT AUTO_INCREMENT PRIMARY KEY,

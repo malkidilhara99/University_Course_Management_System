@@ -1,6 +1,6 @@
 # Deployment Guide: University Course Management System
 
-This guide will walk you through deploying the University Course Management System to Netlify (frontend) and Railway (backend and database).
+This guide will walk  through deploying the University Course Management System to Netlify (frontend) and Railway (backend and database).
 
 ## Prerequisites
 
@@ -10,7 +10,7 @@ This guide will walk you through deploying the University Course Management Syst
 
 ## Step 1: Prepare the Repository
 
-Make sure all your changes are committed and pushed to GitHub:
+Make sure all changes are committed and pushed to GitHub:
 
 ```bash
 git add .
@@ -20,23 +20,23 @@ git push
 
 ## Step 2: Deploy Backend to Railway
 
-1. **Create a Railway account** if you don't have one
+1. **Create a Railway account** if needed
    - Go to [railway.app](https://railway.app)
-   - Sign up with your GitHub account
+   - Sign up with GitHub account
 
 2. **Create a new project in Railway**
    - Click "New Project"
    - Select "Deploy from GitHub repo"
-   - Choose your "University_Course_Management_System" repository
+   - Choose the "University_Course_Management_System" repository
    - Click "Deploy Now"
 
-3. **Add a MySQL database to your project**
-   - In your project dashboard, click "New"
+3. **Add a MySQL database to the project**
+   - In the project dashboard, click "New"
    - Select "Database" and then "MySQL"
    - Wait for the database to be provisioned
 
-4. **Configure environment variables for your backend**
-   - Go to your backend service
+4. **Configure environment variables for the backend**
+   - Go to the backend service
    - Click on the "Variables" tab
    - Add the following variables:
      ```
@@ -44,47 +44,47 @@ git push
      SPRING_DATASOURCE_URL=${{DATABASE_URL}}
      SPRING_DATASOURCE_USERNAME=${{DATABASE_USERNAME}}
      SPRING_DATASOURCE_PASSWORD=${{DATABASE_PASSWORD}}
-     JWT_SECRET=your_secure_jwt_secret_key_here
+     JWT_SECRET=a_secure_jwt_secret_key_here
      ```
 
 5. **Verify Backend Deployment**
    - Click on the "Deployments" tab to see the deployment status
-   - Once deployed, click on "Settings" and find your service URL
-   - Visit `your-service-url/actuator/health` to verify the backend is running
+   - Once deployed, click on "Settings" and find the service URL
+   - Visit `[service-url]/actuator/health` to verify the backend is running
 
 ## Step 3: Deploy Frontend to Netlify
 
-1. **Create a Netlify account** if you don't have one
+1. **Create a Netlify account** if needed
    - Go to [netlify.com](https://netlify.com)
-   - Sign up with your GitHub account
+   - Sign up with GitHub account
 
-2. **Import your project**
+2. **Import the project**
    - Click "Add new site" > "Import an existing project"
    - Select GitHub and authorize Netlify
-   - Select your "University_Course_Management_System" repository
+   - Select the "University_Course_Management_System" repository
 
 3. **Configure build settings**
    - The netlify.toml file should handle this automatically
-   - You should see:
+   - The following settings should appear:
      - Base directory: `frontend/course-management-ui`
      - Build command: `npm ci --legacy-peer-deps && npm run build`
      - Publish directory: `build`
 
 4. **Update environment variables**
-   - After your backend is deployed on Railway, get its URL
+   - After the backend is deployed on Railway, get the URL
    - In Netlify, go to Site settings > Environment variables
-   - Add `REACT_APP_API_BASE` with your Railway backend URL
+   - Add `REACT_APP_API_BASE` with the Railway backend URL
 
 5. **Deploy the site**
    - Click "Deploy site"
    - Wait for the build to complete
-   - Netlify will provide you with a URL for your frontend
+   - Netlify will provide a URL for the frontend
 
 ## Step 4: Configure CORS on the Backend
 
-If you encounter CORS issues:
+If CORS issues are encountered:
 
-1. Add your Netlify frontend URL to the allowed origins in your backend code
+1. Add the Netlify frontend URL to the allowed origins in the backend code
 2. Redeploy the backend to Railway
 
 ## Step 5: Custom Domain (Optional)
@@ -93,13 +93,13 @@ If you encounter CORS issues:
    - Go to Site settings > Domain management > Add custom domain
 
 2. **For Railway:**
-   - Go to your backend service > Settings > Custom Domain
+   - Go to the backend service > Settings > Custom Domain
 
 ## Maintenance and Updates
 
-To update your deployed application:
+To update the deployed application:
 
-1. **Make changes to your code locally**
+1. **Make changes to the code locally**
 2. **Commit and push to GitHub**
 3. **Both Netlify and Railway will automatically rebuild and redeploy**
 
@@ -112,5 +112,5 @@ To update your deployed application:
 ## Cost Considerations
 
 - Both Netlify and Railway offer free tiers with limitations
-- Monitor your usage to avoid unexpected charges
-- Railway free tier times out after inactivity, you'll need to reactivate it occasionally
+- Monitor usage to avoid unexpected charges
+- Railway free tier times out after inactivity and requires manual reactivation occasionally
